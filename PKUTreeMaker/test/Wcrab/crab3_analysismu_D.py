@@ -14,7 +14,10 @@ config.JobType.allowUndistributedCMSSW = True
 config.section_("Data")
 config.Data.inputDataset = '/SingleMuon/Run2016D-03Feb2017-v1/MINIAOD'
 config.Data.inputDBS = 'global'
+
 config.Data.splitting = 'LumiBased'
+#config.Data.splitting = 'Automatic'     #added by myself
+
 config.Data.unitsPerJob = 80
 config.Data.lumiMask = 'Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 #config.Data.runRange = '246908-258750'
