@@ -772,7 +772,9 @@ int PKUTreeMaker::matchToTruth(const reco::Photon &pho,
         return UNMATCHED;
        // ISRPho = false;
     }
-     isprompt=(*genParticles)[im].isPromptFinalState();
+//     isprompt=(*genParticles)[im].isPromptFinalState();
+
+     isprompt=((*genParticles)[im].isPromptFinalState() || (*genParticles)[im].isPromptTauDecayProductFinalState());
     // Find ID of the parent of the found generator level photon match
     int ancestorPID = -999;
     int ancestorStatus = -999;
