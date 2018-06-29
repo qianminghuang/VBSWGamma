@@ -1118,12 +1118,18 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             double chIso1 =  (*phoChargedIsolationMap)[pho];
             double nhIso1 =  (*phoNeutralHadronIsolationMap)[pho];
             double phIso1 = (*phoPhotonIsolationMap)[pho];
+/*
             double chiso=std::max(0.0, chIso1 - rhoVal_*EAch(fabs((*photons)[ip].eta()))); //effAreaChHadrons_.getEffectiveArea(fabs(phosc_eta)));
 //            double chiso=std::max((*photons)[ip].chargedHadronIso()-rhoVal_*EAch(fabs((*photons)[ip].eta())),0.0);
             double nhiso=std::max(0.0, nhIso1 - rhoVal_*EAnh(fabs((*photons)[ip].eta()))); //effAreaNeuHadrons_.getEffectiveArea(fabs(phosc_eta)));
 //            double nhiso=std::max((*photons)[ip].neutralHadronIso()-rhoVal_*EAnh(fabs((*photons)[ip].eta())),0.0);
             double phoiso=std::max(0.0, phIso1 - rhoVal_*EApho(fabs((*photons)[ip].eta()))); //effAreaPhotons_.getEffectiveArea(fabs(phosc_eta)));
 //            double phoiso=std::max((*photons)[ip].photonIso()-rhoVal_*EApho(fabs((*photons)[ip].eta())),0.0);
+*/
+            double chiso=std::max(0.0, chIso1 - rhoVal_*EAch(fabs(phosc_eta)));
+            double nhiso=std::max(0.0, nhIso1 - rhoVal_*EAnh(fabs(phosc_eta)));
+            double phoiso=std::max(0.0, phIso1 - rhoVal_*EApho(fabs(phosc_eta)));
+
 
             int ismedium_photon=0;
 			int ismedium_photon_f=0;
