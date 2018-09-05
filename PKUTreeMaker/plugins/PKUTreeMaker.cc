@@ -813,6 +813,7 @@ int PKUTreeMaker::matchToTruth(const reco::Photon &pho,
 //     isprompt=(*genParticles)[im].isPromptFinalState();
 
      isprompt=((*genParticles)[im].isPromptFinalState() || (*genParticles)[im].isDirectPromptTauDecayProductFinalState());
+        const reco::Candidate *particle = &(*genParticles)[im];
 	if(abs(particle->pdgId()) == 11)isprompt = 0;
 
     // Find ID of the parent of the found generator level photon match
