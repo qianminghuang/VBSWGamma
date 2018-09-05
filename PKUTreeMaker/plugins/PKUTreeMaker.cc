@@ -92,7 +92,10 @@ private:
                                   float lxyMin=2.0, float probMin=1e-6, unsigned int nHitsBeforeVtxMax=0);
   int matchToTruth(const reco::Photon &pho,
                      const edm::Handle<edm::View<reco::GenParticle>>  &genParticles, bool &ISRPho, double &dR, int &isprompt);
-    
+
+  int matchToTrueLep(double lept_eta,double lept_phi,
+                     const edm::Handle<edm::View<reco::GenParticle>>  &genParticles, double &dR, int &ispromptLep);            //////////////////////////////////
+
   void findFirstNonPhotonMother(const reco::Candidate *particle,
                                   int &ancestorPID, int &ancestorStatus);
   float EAch(float x); 
@@ -183,8 +186,8 @@ float  rawPt;
   //Photon gen match
   int   isTrue_;
   bool ISRPho;
-  int isprompt_;
-  double dR_;
+  int isprompt_,ispromptLep_,lepton_istrue;    //////////////////////////////////
+  double dR_,dR1_;
   //Jets
   int jet1hf,jet1pf,jet2hf,jet2pf,jet1hf_f,jet1pf_f,jet2hf_f,jet2pf_f;
   double jet1pt, jet1eta, jet1phi, jet1e, jet1csv, jet1icsv;
@@ -430,6 +433,7 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
 //    outTree_->Branch("ISRPho"        , &ISRPho       ,"ISRPho/O"       );
   outTree_->Branch("isTrue", &isTrue_, "isTrue/I");
   outTree_->Branch("isprompt"    , &isprompt_, "isprompt/I");
+  outTree_->Branch("ispromptLep"    , &ispromptLep_, "ispromptLep/I");
 //jets
   outTree_->Branch("ak4jet_hf"        ,ak4jet_hf       ,"ak4jet_hf[6]/I"       );
   outTree_->Branch("ak4jet_pf"        ,ak4jet_pf       ,"ak4jet_pf[6]/I"       );
@@ -742,6 +746,38 @@ bool PKUTreeMaker::hasMatchedPromptElectron(const reco::SuperClusterRef &sc, con
     }
     return false;
 }
+
+/////////////////////////////////////////////////////////////
+int PKUTreeMaker::matchToTrueLep(double lept_eta,double lept_phi,
+                                      const edm::Handle<edm::View<reco::GenParticle>>
+                                      &genParticles, double &dR, int &ispromptLep)
+{
+    dR = 999;
+    const reco::Candidate *closestLep = 0;
+
+    int im=0;
+    for(size_t i=0; i<genParticles->size();i++){
+        const reco::Candidate *particle = &(*genParticles)[i];
+	if (particle->pt() < 10) continue;
+
+	if( (abs(particle->pdgId()) != 11 && abs(particle->pdgId()) != 13) || particle->status() != 1 )
+
+        continue;
+        double dRtmp = deltaR(lept_eta,lept_phi,particle->eta(),particle->phi());  
+        if( dRtmp < dR ){
+            dR = dRtmp;
+            im=i;    
+            closestLep = particle;
+         }
+  }
+
+    if( !(closestLep != 0 && dR < 0.3) ) {
+        return UNMATCHED;
+    }
+     ispromptLep=((*genParticles)[im].isPromptFinalState() || (*genParticles)[im].isDirectPromptTauDecayProductFinalState());
+return 1;
+}
+/////////////////////////////////////////////////////////////
 //------------------------------------
 int PKUTreeMaker::matchToTruth(const reco::Photon &pho,
                                       const edm::Handle<edm::View<reco::GenParticle>>
@@ -757,7 +793,9 @@ int PKUTreeMaker::matchToTruth(const reco::Photon &pho,
     int im=0;
     for(size_t i=0; i<genParticles->size();i++){
         const reco::Candidate *particle = &(*genParticles)[i];
-        if( abs(particle->pdgId()) != 22 || particle->status() != 1 )
+	if (particle->pt() < 10) continue;   /////////////////////////////////////////////////////////////
+	if( (abs(particle->pdgId()) != 11 && abs(particle->pdgId()) != 22) || particle->status() != 1 )   /////////////////////////////////////////////////////////////
+//        if( abs(particle->pdgId()) != 22 || particle->status() != 1 )
         continue;
         double dRtmp = deltaR(pho.eta(),pho.phi(),particle->eta(),particle->phi());  
         if( dRtmp < dR ){
@@ -775,6 +813,8 @@ int PKUTreeMaker::matchToTruth(const reco::Photon &pho,
 //     isprompt=(*genParticles)[im].isPromptFinalState();
 
      isprompt=((*genParticles)[im].isPromptFinalState() || (*genParticles)[im].isDirectPromptTauDecayProductFinalState());
+	if(abs(particle->pdgId()) == 11)isprompt = 0;
+
     // Find ID of the parent of the found generator level photon match
     int ancestorPID = -999;
     int ancestorStatus = -999;
@@ -1089,6 +1129,12 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        mtVlepJEC       = WLeptonic.mt();
        mtVlepJECnew=sqrt(2*ptlep1*MET_et*(1.0-cos(philep1-MET_phi)));
 
+                if(RunOnMC_ && ptlep1>10){
+	//const auto lept = lepton;
+	lepton_istrue=matchToTrueLep(etalep1,philep1,genParticles,dR1_,ispromptLep_);
+		}
+
+
 // ************************* Photon Jets Information****************** //
 // *************************************************************//
          double rhoVal_;
@@ -1160,7 +1206,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                 photon_chiso[ip]=chiso;
                 photon_nhiso[ip]=nhiso;
                 photon_phoiso[ip]=phoiso;
-                if(RunOnMC_ && photon_pt[ip]>0){
+                if(RunOnMC_ && photon_pt[ip]>10){
                   const auto pho = photons->ptrAt(ip);
                   photon_istrue[ip]=matchToTruth(*pho, genParticles, ISRPho, dR_, photon_isprompt[ip]);
                  }
@@ -1524,8 +1570,12 @@ ak4jet_pf[i]=-1e1;
     
      ISRPho = false;
      dR_ = 999;
+     dR1_ = 999;
      isTrue_=-1;
      isprompt_=-1; 
+     ispromptLep_=-1; 
+     lepton_istrue=-1;
+
      jet1pt=-1e1;  jet1pt_f=-1e1;
      jet1eta=-1e1;  jet1eta_f=-1e1;
      jet1phi=-1e1;  jet1phi_f=-1e1;
