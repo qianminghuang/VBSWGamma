@@ -161,8 +161,8 @@ void MuonIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
 
   if(mu1.pt()>20 && fabs(mu1.eta())<2.4 && mu1.isGlobalMuon() && mu1.isPFMuon() && (mu1.globalTrack()->normalizedChi2())<10 && (mu1.globalTrack()->hitPattern().numberOfValidMuonHits())>0 && (mu1.numberOfMatchedStations())>1 && fabs(d0vtx)<0.2 && fabs(dzvtx)<0.5 &&/* (mu1.numberOfMatchedStations())>1 && */ (mu1.innerTrack()->hitPattern().numberOfValidPixelHits()) > 0 && (mu1.innerTrack()->hitPattern().trackerLayersWithMeasurement())>5 && fabs(isolation)<0.15) { isTight = true;}
 
-//  if(mu1.pt()>20 && abs(mu1.eta())<2.1 && mu1.isGlobalMuon() && mu1.isPFMuon() && (mu1.globalTrack()->normalizedChi2())<10 && (mu1.globalTrack()->hitPattern().numberOfValidMuonHits())>0 && (mu1.numberOfMatchedStations())>1 && abs(d0vtx)<0.2 && abs(dzvtx)<0.5 && (mu1.numberOfMatchedStations())>1 && (mu1.globalTrack()->hitPattern().trackerLayersWithMeasurement())>5 && abs(isolation)<0.12) { isTight = true;}
- 
+//for fake muon study
+//  if(mu1.pt()>20 && fabs(mu1.eta())<2.4  && (mu1.isGlobalMuon() || mu1.isTrackerMuon()) && mu1.isPFMuon() && fabs(isolation)<3 && fabs(d0vtx)<0.2 && fabs(dzvtx)<0.5 && !((mu1.globalTrack()->normalizedChi2())<10 && (mu1.innerTrack()->hitPattern().trackerLayersWithMeasurement())>5 && fabs(isolation)<0.15)) { isTight = true;}  //&& (mu1.globalTrack()->hitPattern().numberOfValidMuonHits())>0  && (mu1.innerTrack()->hitPattern().numberOfValidPixelHits()) > 0 && (mu1.numberOfMatchedStations())>1
 
   if(mu1.pt()>20 && fabs(mu1.eta())<2.4  && (mu1.isGlobalMuon() || mu1.isTrackerMuon()) && mu1.isPFMuon() && fabs(isolation)<0.25) { isLoose = true;}
 
