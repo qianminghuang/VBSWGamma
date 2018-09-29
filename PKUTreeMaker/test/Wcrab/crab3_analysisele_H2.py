@@ -2,7 +2,7 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 config.section_("General")
 #config.General.requestName   = 'SEle16H-v1'
-config.General.requestName   = 'SEle16H-v2-test'
+config.General.requestName   = 'SEle16H-v2'
 config.General.transferLogs = True
 
 config.section_("JobType")
