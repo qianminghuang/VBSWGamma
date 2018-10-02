@@ -1,0 +1,18 @@
+Steps
+------
+- cmsrel CMSSW_8_0_26_patch1
+- cd CMSSW_8_0_26_patch1/src
+- cmsenv
+- git cms-init
+- git cms-merge-topic cms-egamma:EGM_gain_v1
+- cd EgammaAnalysis/ElectronTools/data
+- git clone -b Moriond17_gainSwitch_unc https://github.com/ECALELFS/ScalesSmearings.git
+- git checkout Moriond17_23Jan_v2
+- cd ../../../
+- sed -i '1ccorrectionType = "Moriond17_23Jan"' EgammaAnalysis/ElectronTools/python/calibrationTablesRun2.py
+- git cms-merge-topic cms-met:METRecipe_8020 -u
+- git cms-merge-topic Sam-Harper:HEEPV70VID_8010_ReducedCheckout
+- mkdir -p ../external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/
+- git clone git@github.com:cms-data/RecoEgamma-ElectronIdentification ../external/slc6_amd64_gcc530/data/RecoEgamma/ElectronIdentification/data
+- git clone https://github.com/qianminghuang/VBSWGamma.git
+- scram b -j 32
