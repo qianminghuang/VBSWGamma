@@ -152,7 +152,7 @@ private:
   double ptVlepJEC, yVlepJEC, phiVlepJEC, massVlepJEC, mtVlepJEC, mtVlepJECnew;
   double Mla, Mva;
   double Mla_f, Mva_f;
-  double ptlep1, etalep1, philep1;
+  double ptlep1, etalep1, philep1,energylep1;
   int  lep, nlooseeles,nloosemus;
   double met, metPhi, j1metPhi, j2metPhi;
   double j1metPhi_f, j2metPhi_f;
@@ -171,12 +171,12 @@ float  rawPt;
   double genphoton_pt[6],genphoton_eta[6],genphoton_phi[6];
   double genmuon_pt[6],genmuon_eta[6],genmuon_phi[6];
   double genelectron_pt[6],genelectron_eta[6],genelectron_phi[6];
-  double photon_pt[6],photon_eta[6],photon_phi[6],photon_e[6];
+  double photon_pt[6],photon_eta[6],photon_phi[6],photon_e[6],photonsc_eta[6],photonsc_phi[6];
   bool   photon_pev[6],photon_pevnew[6],photon_ppsv[6],photon_iseb[6],photon_isee[6];
   double photon_hoe[6],photon_sieie[6],photon_sieie2[6], photon_chiso[6],photon_nhiso[6],photon_phoiso[6],photon_drla[6],photon_mla[6],photon_mva[6];
   int      photon_istrue[6], photon_isprompt[6];
-  double photonet, photoneta, photonphi, photone;
-  double photonet_f, photoneta_f, photonphi_f, photone_f;
+  double photonet, photoneta, photonphi, photone, photonsceta, photonscphi;
+  double photonet_f, photoneta_f, photonphi_f, photone_f, photonsceta_f, photonscphi_f;
   double photonsieie, photonphoiso, photonchiso, photonnhiso;
   double photonsieie_f, photonphoiso_f, photonchiso_f, photonnhiso_f;
   int iphoton;
@@ -389,6 +389,8 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("photon_eta"        , photon_eta       ,"photon_eta[6]/D"       );
   outTree_->Branch("photon_phi"        , photon_phi       ,"photon_phi[6]/D"       );
   outTree_->Branch("photon_e"        , photon_e       ,"photon_e[6]/D"       );
+  outTree_->Branch("photonsc_eta"        , photonsc_eta       ,"photonsc_eta[6]/D"       );
+  outTree_->Branch("photonsc_phi"        , photonsc_phi       ,"photonsc_phi[6]/D"       );
   outTree_->Branch("photon_pev"        , photon_pev       ,"photon_pev[6]/O"       );
   outTree_->Branch("photon_pevnew"        , photon_pevnew       ,"photon_pevnew[6]/O"       );
   outTree_->Branch("photon_ppsv"        , photon_ppsv       ,"photon_ppsv[6]/O"       );
@@ -408,8 +410,8 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("passEleVeto"        , &passEleVeto       ,"passEleVeto/O"       );
   outTree_->Branch("passEleVetonew"        , &passEleVetonew       ,"passEleVetonew/O"       );
   outTree_->Branch("passPixelSeedVeto"        , &passPixelSeedVeto       ,"passPixelSeedVeto/O"       );
-  outTree_->Branch("photonhaspixelseed"        , &photonhaspixelseed       ,"photonhaspexelseed/O"       );
-  outTree_->Branch("photonhaspixelseed_f"        , &photonhaspixelseed_f      ,"photonhaspexelseed_f/O"       );
+  outTree_->Branch("photonhaspixelseed"        , &photonhaspixelseed       ,"photonhaspixelseed/O"       );
+  outTree_->Branch("photonhaspixelseed_f"        , &photonhaspixelseed_f      ,"photonhaspixelseed_f/O"       );
   outTree_->Branch("photonpasseleveto"        , &photonpasseleveto       ,"photonpasseleveto/O"       );
   outTree_->Branch("photonpasseleveto_f"        , &photonpasseleveto_f       ,"photonpasseleveto_F/O"       );
   outTree_->Branch("photonet"          ,&photonet         ,"photonet/D"         );
@@ -420,6 +422,10 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("photonphi_f"          ,&photonphi_f         ,"photonphi_f/D"         );
   outTree_->Branch("photone"          ,&photone         ,"photone/D"         );
   outTree_->Branch("photone_f"          ,&photone_f         ,"photone_f/D"         );
+  outTree_->Branch("photonsceta"          ,&photonsceta         ,"photonsceta/D"         );
+  outTree_->Branch("photonsceta_f"          ,&photonsceta_f         ,"photonsceta_f/D"         );
+  outTree_->Branch("photonscphi"          ,&photonscphi         ,"photonscphi/D"         );
+  outTree_->Branch("photonscphi_f"          ,&photonscphi_f         ,"photonscphi_f/D"         );
   outTree_->Branch("photonsieie"          ,&photonsieie         ,"photonsieie/D"         );
   outTree_->Branch("photonsieie_f"          ,&photonsieie_f         ,"photonsieie_f/D"         );
   outTree_->Branch("photonphoiso"          ,&photonphoiso         ,"photonphoiso/D"         );
@@ -498,6 +504,7 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("ptlep1"          ,&ptlep1         ,"ptlep1/D"         );
   outTree_->Branch("etalep1"         ,&etalep1        ,"etalep1/D"        );
   outTree_->Branch("philep1"         ,&philep1        ,"philep1/D"        );
+  outTree_->Branch("energylep1"         ,&energylep1        ,"energylep1/D"        );
   outTree_->Branch("j1metPhi"          ,&j1metPhi         ,"j1metPhi/D"         );
   outTree_->Branch("j1metPhi_f"          ,&j1metPhi_f         ,"j1metPhi_f/D"         );
   outTree_->Branch("j2metPhi"          ,&j2metPhi         ,"j2metPhi/D"         );
@@ -1106,7 +1113,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
        ptlep1       = leptonicV.daughter(1)->pt();
        etalep1      = leptonicV.daughter(1)->eta();
        philep1      = leptonicV.daughter(1)->phi();
-       double energylep1     = leptonicV.daughter(1)->energy();
+       energylep1     = leptonicV.daughter(1)->energy();
        if(leptonicV.daughter(0)->isElectron()||leptonicV.daughter(0)->isMuon() ) {
        ptlep1       = leptonicV.daughter(0)->pt();
        etalep1      = leptonicV.daughter(0)->eta();
@@ -1161,12 +1168,11 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           for (size_t ip=0; ip<photons->size();ip++)
          {
             const auto pho = photons->ptrAt(ip);
- 
+
             double phosc_eta=pho->superCluster()->eta();
-//            std::cout<<pho->superCluster()->eta()<<" "<<(*photons)[ip].eta()<<std::endl;
             double phosc_phi=pho->superCluster()->phi();
+
             double pho_ieie=(*full5x5SigmaIEtaIEtaMap)[pho];
-//            std::cout<<(*full5x5SigmaIEtaIEtaMap)[ pho ]<<" "<<(*photons)[ip].sigmaIetaIeta()<<std::endl;
             double chIso1 =  (*phoChargedIsolationMap)[pho];
             double nhIso1 =  (*phoNeutralHadronIsolationMap)[pho];
             double phIso1 = (*phoPhotonIsolationMap)[pho];
@@ -1198,9 +1204,11 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             if(ip<6)  {
                 photon_pt[ip] = (*photons)[ip].pt();
-                photon_eta[ip] = phosc_eta;//(*photons)[ip].eta();
-                photon_phi[ip] = phosc_phi;//(*photons)[ip].phi();
+                photon_eta[ip] = (*photons)[ip].eta();
+                photon_phi[ip] = (*photons)[ip].phi();
                 photon_e[ip] = (*photons)[ip].energy();
+                photonsc_eta[ip] = phosc_eta;
+                photonsc_phi[ip] = phosc_phi;
                 photon_pev[ip]=passEleVeto;
                 photon_pevnew[ip]=passEleVetonew;
                 photon_ppsv[ip]=passPixelSeedVeto;
@@ -1216,7 +1224,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                   const auto pho = photons->ptrAt(ip);
                   photon_istrue[ip]=matchToTruth(*pho, genParticles, ISRPho, dR_, photon_isprompt[ip]);
                  }
-                photon_drla[ip]=deltaR(photon_eta[ip],photon_phi[ip],etalep1,philep1);
+                photon_drla[ip]=deltaR(photonsc_eta[ip],photonsc_phi[ip],etalep1,philep1);
                 TLorentzVector tp4;
                 tp4.SetPtEtaPhiE(photon_pt[ip],photon_eta[ip],photon_phi[ip],photon_e[ip]);
                 photon_mla[ip]=(tp4+glepton).M();
@@ -1271,11 +1279,13 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                photoneta=photon_eta[iphoton];//(*photons)[iphoton].eta();
                photonphi=photon_phi[iphoton];//(*photons)[iphoton].phi();
                photone=photon_e[iphoton];//(*photons)[iphoton].energy();
+		photonsceta=photonsc_eta[iphoton];
+		photonscphi=photonsc_phi[iphoton];
                photonsieie=photon_sieie[iphoton];//(*photons)[iphoton].sigmaIetaIeta();
                photonphoiso=photon_phoiso[iphoton];//std::max((*photons)[iphoton].photonIso()-rhoVal_*EApho(fabs((*photons)[iphoton].eta())),0.0);
                photonchiso=photon_chiso[iphoton];//std::max((*photons)[iphoton].chargedHadronIso()-rhoVal_*EAch(fabs((*photons)[iphoton].eta())),0.0);
                photonnhiso=photon_nhiso[iphoton];//std::max((*photons)[iphoton].neutralHadronIso()-rhoVal_*EAnh(fabs((*photons)[iphoton].eta())),0.0);
-               drla=deltaR(photon_eta[iphoton],photon_phi[iphoton],etalep1,philep1);
+               drla=deltaR(photonsc_eta[iphoton],photonsc_phi[iphoton],etalep1,philep1);
                TLorentzVector photonp4;
                photonp4.SetPtEtaPhiE(photonet, photoneta, photonphi, photone);
                Mla=(photonp4+glepton).M();
@@ -1292,11 +1302,13 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		       photoneta_f=photon_eta[iphoton_f];//(*photons)[iphoton_f].eta();
 		       photonphi_f=photon_phi[iphoton_f];//(*photons)[iphoton_f].phi();
 		       photone_f=photon_e[iphoton_f];//(*photons)[iphoton_f].energy();
+                       photonsceta_f=photonsc_eta[iphoton_f];
+                       photonscphi_f=photonsc_phi[iphoton_f];
 		       photonsieie_f=photon_sieie[iphoton_f];//(*photons)[iphoton_f].sigmaIetaIeta();
 		       photonphoiso_f=photon_phoiso[iphoton_f];//std::max((*photons)[iphoton_f].photonIso()-rhoVal_*EApho(fabs((*photons)[iphoton_f].eta())),0.0);
 		       photonchiso_f=photon_chiso[iphoton_f];//std::max((*photons)[iphoton_f].chargedHadronIso()-rhoVal_*EAch(fabs((*photons)[iphoton_f].eta())),0.0);
 		       photonnhiso_f=photon_nhiso[iphoton_f];//std::max((*photons)[iphoton_f].neutralHadronIso()-rhoVal_*EAnh(fabs((*photons)[iphoton_f].eta())),0.0);
-		       drla_f=deltaR(photon_eta[iphoton_f],photon_phi[iphoton_f],etalep1,philep1);
+		       drla_f=deltaR(photonsc_eta[iphoton_f],photonsc_phi[iphoton_f],etalep1,philep1);
 		       TLorentzVector photonp4_f;
 		       photonp4_f.SetPtEtaPhiE(photonet_f, photoneta_f, photonphi_f, photone_f);
 	           Mla_f=(photonp4_f+glepton).M();
@@ -1356,7 +1368,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
            for (size_t i=0;i<jets.size();i++) {
              if(iphoton>-1) {    
-              double drtmp1=deltaR(jets.at(i)->Eta(), jets.at(i)->Phi(), photoneta,photonphi);
+              double drtmp1=deltaR(jets.at(i)->Eta(), jets.at(i)->Phi(), photonsceta,photonscphi);
                if(drtmp1>0.5 && jetindexphoton12[0]==-1 && jetindexphoton12[1]==-1) {
                      jetindexphoton12[0] = i;
                      continue;  // the first num
@@ -1370,7 +1382,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	   for (size_t i=0;i<jets.size();i++) {
 	     if(iphoton_f>-1) {    
-	      double drtmp1_f=deltaR(jets.at(i)->Eta(), jets.at(i)->Phi(), photoneta_f,photonphi_f);
+	      double drtmp1_f=deltaR(jets.at(i)->Eta(), jets.at(i)->Phi(), photonsceta_f,photonscphi_f);
 	       if(drtmp1_f>0.5 && jetindexphoton12_f[0]==-1 && jetindexphoton12_f[1]==-1) {
 		    jetindexphoton12_f[0] = i;
 		    continue;  // the first num
@@ -1400,8 +1412,8 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             jet2csv =(*ak4jets)[jetindexphoton12[1]].bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
             jet1icsv =(*ak4jets)[jetindexphoton12[0]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
             jet2icsv =(*ak4jets)[jetindexphoton12[1]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-            drj1a=deltaR(jet1eta,jet1phi,photoneta,photonphi);
-            drj2a=deltaR(jet2eta,jet2phi,photoneta,photonphi);
+            drj1a=deltaR(jet1eta,jet1phi,photonsceta,photonscphi);
+            drj2a=deltaR(jet2eta,jet2phi,photonsceta,photonscphi);
             drj1l=deltaR(jet1eta,jet1phi,etalep1,philep1);
             drj2l=deltaR(jet2eta,jet2phi,etalep1,philep1);
             TLorentzVector j1p4;
@@ -1444,8 +1456,8 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             jet2csv_f =(*ak4jets)[jetindexphoton12_f[1]].bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
             jet1icsv_f =(*ak4jets)[jetindexphoton12_f[0]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
             jet2icsv_f =(*ak4jets)[jetindexphoton12_f[1]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-	    drj1a_f=deltaR(jet1eta_f,jet1phi_f,photoneta_f,photonphi_f);
-            drj2a_f=deltaR(jet2eta_f,jet2phi_f,photoneta_f,photonphi_f);
+	    drj1a_f=deltaR(jet1eta_f,jet1phi_f,photonsceta_f,photonscphi_f);
+            drj2a_f=deltaR(jet2eta_f,jet2phi_f,photonsceta_f,photonscphi_f);
             drj1l_f=deltaR(jet1eta_f,jet1phi_f,etalep1,philep1);
             drj2l_f=deltaR(jet2eta_f,jet2phi_f,etalep1,philep1);
             TLorentzVector j1p4_f;
@@ -1510,6 +1522,7 @@ void PKUTreeMaker::setDummyValues() {
      ptlep1         = -1e1;
      etalep1        = -1e1;
      philep1        = -1e1;
+     energylep1     = -1e1;
      met            = -1e1;
      metPhi         = -1e1;
      j1metPhi         = -1e1; j1metPhi_f         = -1e1;
@@ -1543,6 +1556,8 @@ ak4jet_pf[i]=-1e1;
      photon_eta[i] = -1e1;
      photon_phi[i] = -1e1;
      photon_e[i] = -1e1;
+     photonsc_eta[i] = -1e1;
+     photonsc_phi[i] = -1e1;
      photon_pev[i] = false;
      photon_pevnew[i] = false;
      photon_ppsv[i] = false;
@@ -1571,6 +1586,8 @@ ak4jet_pf[i]=-1e1;
      photoneta=-1e1;  photoneta_f=-1e1;
      photonphi=-1e1;  photonphi_f=-1e1;
      photone=-1e1;   photone_f=-1e1;
+     photonsceta=-1e1;  photonsceta_f=-1e1;
+     photonscphi=-1e1;  photonscphi_f=-1e1;
      photonsieie=-1e1;  photonsieie_f=-1e1;
      photonphoiso=-1e1;  photonphoiso_f=-1e1;
      photonchiso=-1e1;  photonchiso_f=-1e1;
