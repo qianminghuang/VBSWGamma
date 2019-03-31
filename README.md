@@ -8,8 +8,9 @@ git cms-init
 git cms-merge-topic cms-egamma:EGM_gain_v1
 cd EgammaAnalysis/ElectronTools/data
 git clone https://github.com/ECALELFS/ScalesSmearings.git
+git checkout -b Moriond17_gainSwitch_unc/Moriond17_23Jan_v2
 cd ../../../
-
+sed -i '1ccorrectionType = "Moriond17_23Jan"' EgammaAnalysis/ElectronTools/python/calibrationTablesRun2.py
 git cms-merge-topic lathomas:L1Prefiring_8_0_32
 git cms-merge-topic cms-met:METRecipe_8020 -u
 
