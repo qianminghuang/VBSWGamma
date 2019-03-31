@@ -210,7 +210,7 @@ process.analysis = cms.Path(
                             process.jetSequence +
                             process.metfilterSequence +
 #                           process.photonSequence +
-                            process.photonIDValueMapProducer*process.treeDumper +
+                            process.photonIDValueMapProducer +
 				process.prefiringweight*process.treeDumper)
 
 ### Source

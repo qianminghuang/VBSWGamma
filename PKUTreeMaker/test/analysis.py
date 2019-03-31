@@ -53,16 +53,6 @@ process.calibratedPatPhotons.isMC = cms.bool(runOnMC)
 
 #for egamma smearing
 
-# L1 prefiring
-process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
-                                 ThePhotons = cms.InputTag("slimmedPhotons"),
-                                 TheJets = cms.InputTag("slimmedJets"),
-                                 L1Maps = cms.string("./L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"), # update this line with the location of this file
-                                 DataEra = cms.string("2017BtoF"), #Use 2016BtoH for 2016
-                                 UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
-                                 PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
-                                 )
-
 # If Update
 process.goodMuons.src = "slimmedMuons"
 process.goodElectrons.src = "slimmedElectrons"
@@ -148,6 +138,16 @@ else:
  
 process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
    
+# L1 prefiring
+process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
+                                 ThePhotons = cms.InputTag("slimmedPhotons"),
+                                 TheJets = cms.InputTag("slimmedJets"),
+                                 L1Maps = cms.string("../../../L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"), # update this line with the location of this file
+                                 DataEra = cms.string("2017BtoF"), #Use 2016BtoH for 2016
+                                 UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
+                                 PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
+                                 )
+
 process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     originalNEvents = cms.int32(1),
                                     crossSectionPb = cms.double(1),
@@ -204,13 +204,14 @@ process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     )
 
 
+
 process.analysis = cms.Path(
 #                            process.goodOfflinePrimaryVertex +
                             process.leptonSequence +
                             process.jetSequence +
                             process.metfilterSequence +
 #                           process.photonSequence +
-                            process.photonIDValueMapProducer*process.treeDumper +
+                            process.photonIDValueMapProducer +
 				process.prefiringweight*process.treeDumper)
 
 ### Source
@@ -223,7 +224,7 @@ process.source.fileNames = [
 "file:/afs/cern.ch/user/q/qihuang/work/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"
 ]
                        
-process.maxEvents.input = 100
+process.maxEvents.input = -1; #100
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 200
