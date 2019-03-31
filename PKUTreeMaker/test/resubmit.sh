@@ -18,11 +18,11 @@ crab resubmit -d crab_WZ-1
 crab resubmit -d crab_WZ-2
 crab resubmit -d crab_ZZ-1
 crab resubmit -d crab_ZZ-2
+crab resubmit -d crab_WJets-2
+crab resubmit -d crab_WJets-1
 #crab resubmit -d crab_TTA-1
 #crab resubmit -d crab_TTA-2
 #crab resubmit -d crab_ZA-private
-#crab resubmit -d crab_WJets-1
-#crab resubmit -d crab_WJets-2
 #crab resubmit -d crab_ZA-1
 #crab resubmit -d crab_W3Jets-1
 #crab resubmit -d crab_W3Jets-2

@@ -12,14 +12,15 @@ config.JobType.allowUndistributedCMSSW = True
 
 config.section_("Data")
 #config.Data.inputDataset = '/WGToLNuG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM'
-config.Data.userInputFiles = open('./private_QCDZA.txt').readlines();
+config.Data.userInputFiles = open('./private_QCDZA_lowmass.txt').readlines();
 config.Data.outputPrimaryDataset = 'Private_QCDZA'
 #config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 1
+config.Data.unitsPerJob = 5
 config.Data.totalUnits = -1
 config.Data.publication = False
+config.Data.outLFNDirBase = '/store/group/phys_jetmet/qihuang/'
 config.Data.outputDatasetTag = 'ZA-private'
 
 config.section_("Site")
-config.Site.storageSite = 'T3_US_FNALLPC'  #2_CH_CERN'
+config.Site.storageSite = 'T2_CH_CERN'

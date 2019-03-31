@@ -18,8 +18,8 @@ crab kill -d crab_WZ-1
 crab kill -d crab_WZ-2
 crab kill -d crab_ZZ-1
 crab kill -d crab_ZZ-2
-#crab kill -d crab_WJets-1
-#crab kill -d crab_WJets-2
+crab kill -d crab_WJets-1
+crab kill -d crab_WJets-2
 #crab kill -d crab_W3Jets-1
 #crab kill -d crab_W3Jets-2
 #crab kill -d crab_TTA-1
