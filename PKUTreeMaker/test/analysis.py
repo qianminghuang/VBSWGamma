@@ -224,7 +224,7 @@ process.source.fileNames = [
 "file:/afs/cern.ch/user/q/qihuang/work/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"
 ]
                        
-process.maxEvents.input = -1; #100
+process.maxEvents.input = 100
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 200
