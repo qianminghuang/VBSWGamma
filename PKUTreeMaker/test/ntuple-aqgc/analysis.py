@@ -28,6 +28,45 @@ process.load("VAJets.PKUCommon.goodElectrons_cff")
 process.load("VAJets.PKUCommon.goodPhotons_cff")
 process.load("VAJets.PKUCommon.leptonicW_cff")
 
+#for egamma smearing
+
+from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
+process = regressionWeights(process)
+process.load('EgammaAnalysis.ElectronTools.regressionApplication_cff')
+
+process.load('Configuration.StandardSequences.Services_cff')
+process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
+   calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+      engineName = cms.untracked.string('TRandom3'),
+   ),
+   calibratedPatPhotons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
+      engineName = cms.untracked.string('TRandom3'),
+   ),
+)
+process.load('EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi')
+process.load('EgammaAnalysis.ElectronTools.calibratedPatPhotonsRun2_cfi')
+process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons")
+process.calibratedPatElectrons.isMC = cms.bool(runOnMC)
+process.calibratedPatPhotons.photons = cms.InputTag('slimmedPhotons')
+process.calibratedPatPhotons.isMC = cms.bool(runOnMC)
+
+#for egamma smearing
+
+# L1 prefiring
+process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
+                                 ThePhotons = cms.InputTag("slimmedPhotons"),
+                                 TheJets = cms.InputTag("slimmedJets"),
+                                 L1Maps = cms.string("./L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"), // update this line with the location of this file
+                                 DataEra = cms.string("2017BtoF"), //Use 2016BtoH for 2016
+                                 UseJetEMPt = cms.bool(False), //can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
+                                 PrefiringRateSystematicUncty = cms.double(0.2) //Minimum relative prefiring uncty per object
+                                 )
+
+process.p = cms.Path(
+process.prefiringweight *
+process.myanalyzer
+)
+
 # If Update
 process.goodMuons.src = "slimmedMuons"
 process.goodElectrons.src = "slimmedElectrons"
