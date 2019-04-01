@@ -1,5 +1,3 @@
-import os
-relBase = os.environ['CMSSW_BASE']
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process( "TEST" )
@@ -144,8 +142,9 @@ process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
                                  ThePhotons = cms.InputTag("slimmedPhotons"),
                                  TheJets = cms.InputTag("slimmedJets"),
-			         L1Maps = cms.string(relBase+"/src/L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"),
+#			         L1Maps = cms.string(relBase+"/src/L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"),
                                 # L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
+				L1Maps = cms.string("L1PrefiringMaps_new.root"),
                                  DataEra = cms.string("2017BtoF"), #Use 2016BtoH for 2016
                                  UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
                                  PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
@@ -214,8 +213,9 @@ process.analysis = cms.Path(
                             process.jetSequence +
                             process.metfilterSequence +
 #                           process.photonSequence +
-                            process.photonIDValueMapProducer +
-				process.prefiringweight*process.treeDumper)
+			   process.prefiringweight +
+                            process.photonIDValueMapProducer*process.treeDumper)
+#				process.prefiringweight*process.treeDumper)
 
 ### Source
 process.load("VAJets.PKUCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
@@ -227,7 +227,7 @@ process.source.fileNames = [
 "file:/afs/cern.ch/user/q/qihuang/work/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"
 ]
                        
-process.maxEvents.input = -1; #100
+process.maxEvents.input = 100
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 200
