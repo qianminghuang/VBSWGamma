@@ -24,6 +24,8 @@ git cms-merge-topic lathomas:L1Prefiring_8_0_32
 
 git cms-merge-topic cms-met:METRecipe_8020 -u
 
+mv L1Prefiring/EventWeightProducer/files L1Prefiring/EventWeightProducer/data
+
 git-cms-addpkg CommonTools/UtilAlgos/
 git-cms-addpkg CommonTools/UtilAlgos/
 git-cms-addpkg CondFormats/JetMETObjects

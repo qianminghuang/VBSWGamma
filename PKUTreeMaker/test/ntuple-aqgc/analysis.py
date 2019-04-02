@@ -28,6 +28,7 @@ process.load("VAJets.PKUCommon.goodElectrons_cff")
 process.load("VAJets.PKUCommon.goodPhotons_cff")
 process.load("VAJets.PKUCommon.leptonicW_cff")
 
+
 #for egamma smearing
 
 from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
@@ -51,8 +52,6 @@ process.calibratedPatPhotons.photons = cms.InputTag('slimmedPhotons')
 process.calibratedPatPhotons.isMC = cms.bool(runOnMC)
 
 #for egamma smearing
-
-
 
 # If Update
 process.goodMuons.src = "slimmedMuons"
@@ -143,13 +142,13 @@ process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
                                  ThePhotons = cms.InputTag("slimmedPhotons"),
                                  TheJets = cms.InputTag("slimmedJets"),
-				L1Maps = cms.string("L1PrefiringMaps_new.root"),
-                                 #L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
+#                                L1Maps = cms.string(relBase+"/src/L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"),
+                                # L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
+                                L1Maps = cms.string("CMSSW_8_0_32/src/L1Prefiring/EventWeightProducer/data/L1PrefiringMaps_new.root"),
                                  DataEra = cms.string("2016BtoH"), #Use 2016BtoH for 2016
                                  UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
                                  PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
                                  )
-
 
 process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     originalNEvents = cms.int32(1),
@@ -207,14 +206,15 @@ process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     )
 
 
+
 process.analysis = cms.Path(
 #                            process.goodOfflinePrimaryVertex +
                             process.leptonSequence +
                             process.jetSequence +
                             process.metfilterSequence +
-			    process.prefiringweight +
 #                           process.photonSequence +
-                            process.photonIDValueMapProducer*process.treeDumper)
+                            process.photonIDValueMapProducer*process.prefiringweight*process.treeDumper)
+#                            process.photonIDValueMapProducer*process.treeDumper)
 
 ### Source
 process.load("VAJets.PKUCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
@@ -223,10 +223,10 @@ process.source.fileNames = [
 #"/store/mc/RunIISummer16MiniAODv2/WGToLNuG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/40000/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"   #root://cms-xrd-global.cern.ch/
 #"/store/mc/RunIISummer16MiniAODv2/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v2/00000/EC2D608D-622A-E711-A658-002590D9D984.root"
 #"/store/mc/RunIISummer16MiniAODv2/WGJJToLNuGJJ_EWK_aQGC-FS-FM_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/F205A9E7-0BCE-E611-8617-008CFA5D275C.root"
-"file:/afs/cern.ch/user/q/qihuang/work/WA/J4-AQGC/CMSSW_8_0_32/src/VAJets/PKUTreeMaker/test/F205A9E7-0BCE-E611-8617-008CFA5D275C.root"
+"file:/afs/cern.ch/user/q/qihuang/work/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"
 ]
                        
-process.maxEvents.input = 100  #00
+process.maxEvents.input = 100
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 200

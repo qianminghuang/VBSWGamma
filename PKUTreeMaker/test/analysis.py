@@ -142,9 +142,9 @@ process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
 process.prefiringweight = cms.EDProducer("L1ECALPrefiringWeightProducer",
                                  ThePhotons = cms.InputTag("slimmedPhotons"),
                                  TheJets = cms.InputTag("slimmedJets"),
-#			         L1Maps = cms.string(relBase+"/src/L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"),
+#                                L1Maps = cms.string(relBase+"/src/L1Prefiring/EventWeightProducer/files/L1PrefiringMaps_new.root"),
                                 # L1Maps = cms.string("L1PrefiringMaps_new.root"), # update this line with the location of this file
-				L1Maps = cms.string("L1PrefiringMaps_new.root"),
+                                L1Maps = cms.string("CMSSW_8_0_32/src/L1Prefiring/EventWeightProducer/data/L1PrefiringMaps_new.root"),
                                  DataEra = cms.string("2016BtoH"), #Use 2016BtoH for 2016
                                  UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
                                  PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
@@ -213,9 +213,8 @@ process.analysis = cms.Path(
                             process.jetSequence +
                             process.metfilterSequence +
 #                           process.photonSequence +
-			   process.prefiringweight +
-                            process.photonIDValueMapProducer*process.treeDumper)
-#				process.prefiringweight*process.treeDumper)
+                            process.photonIDValueMapProducer*process.prefiringweight*process.treeDumper)
+#                            process.photonIDValueMapProducer*process.treeDumper)
 
 ### Source
 process.load("VAJets.PKUCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
