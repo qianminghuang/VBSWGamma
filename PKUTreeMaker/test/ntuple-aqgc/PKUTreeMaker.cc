@@ -339,6 +339,13 @@ PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)//:
   jetCorrLabel_ = jecAK4chsLabels_;
   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
 
+//  L1 prefiring
+  prefweight_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProb"));
+  prefweightup_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbUp"));
+  prefweightdown_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbDown"));
+
+
+
 // filter
    noiseFilterToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"));
    HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -941,7 +948,6 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //events weight
    if (RunOnMC_){
-
 //  L1 prefiring
 edm::Handle< double > theprefweight;
 iEvent.getByToken(prefweight_token, theprefweight ) ;
