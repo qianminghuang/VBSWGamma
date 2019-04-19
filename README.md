@@ -81,3 +81,5 @@ git-cms-addpkg SimDataFormats/JetMatching/
 
 
 git clone https://github.com/qianminghuang/VBSWGamma.git VAJets
+
+scram b (-j 8) 
