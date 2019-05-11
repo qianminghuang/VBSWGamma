@@ -159,6 +159,7 @@ process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
 				    RunOnMC = cms.bool(runOnMC), 
                                     generator =  cms.InputTag("generator"),
                                     lhe =  cms.InputTag("externalLHEProducer"),  #for multiple weight
+				    genJet =  cms.InputTag("slimmedGenJets"),
                                     pileup  =   cms.InputTag("slimmedAddPileupInfo"),  
                                     leptonicVSrc = cms.InputTag("leptonicV"),
                                     rho = cms.InputTag("fixedGridRhoFastjetAll"),   
