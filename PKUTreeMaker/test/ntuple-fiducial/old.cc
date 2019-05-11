@@ -206,14 +206,8 @@ float  rawPt;
   double Mjj_f, deltaeta_f, zepp_f; 
 double Dphiwajj,Dphiwajj_f;
 
+
   void setDummyValues();
-
-
-//// L1 prefiring
-
-edm::EDGetTokenT< double > prefweight_token;
-edm::EDGetTokenT< double > prefweightup_token;
-edm::EDGetTokenT< double > prefweightdown_token;
     
   /// Parameters to steer the treeDumper
   int originalNEvents_;
@@ -344,13 +338,6 @@ PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)//:
   jetCorrLabel_ = jecAK4chsLabels_;
   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
 
-//  L1 prefiring
-prefweight_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProb"));
-prefweightup_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbUp"));
-prefweightdown_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbDown"));
-
-
-
 // filter
    noiseFilterToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"));
    HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -382,10 +369,6 @@ prefweightdown_token = consumes< double >(edm::InputTag("prefiringweight:NonPref
   outTree_->Branch("ls"              ,&ls             ,"ls/I"             );
 outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("theWeight"           ,&theWeight         ,"theWeight/D"          );
-  outTree_->Branch("L1prefiring"           ,&L1prefiring         ,"L1prefiring/D"          );
-  outTree_->Branch("L1prefiringup"           ,&L1prefiringup         ,"L1prefiringup/D"          );
-  outTree_->Branch("L1prefiringdown"           ,&L1prefiringdown         ,"L1prefiringdown/D"          );
-outTree_->Branch("pweight"           ,pweight         ,"pweight[1113]/D"          );
   outTree_->Branch("nump"           ,&nump         ,"nump/D"          );
   outTree_->Branch("numm"           ,&numm         ,"numm/D"          );
   outTree_->Branch("npT"           ,&npT         ,"npT/D"          );
@@ -958,19 +941,6 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //events weight
    if (RunOnMC_){
-//  L1 prefiring
-edm::Handle< double > theprefweight;
-iEvent.getByToken(prefweight_token, theprefweight ) ;
-L1prefiring =(*theprefweight);
-
-edm::Handle< double > theprefweightup;
-iEvent.getByToken(prefweightup_token, theprefweightup ) ;
-L1prefiringup =(*theprefweightup);
-
-edm::Handle< double > theprefweightdown;
-iEvent.getByToken(prefweightdown_token, theprefweightdown ) ;
-L1prefiringdown =(*theprefweightdown);
-
 
 //        std::cout<<lheEvtInfo->hepeup().NUP<<std::endl; 
         edm::Handle<GenEventInfoProduct> genEvtInfo;
@@ -978,17 +948,6 @@ L1prefiringdown =(*theprefweightdown);
         theWeight = genEvtInfo->weight();
         if(theWeight>0) nump = nump+1;
         if(theWeight<0) numm = numm+1;
-
-	edm::Handle<LHEEventProduct> wgtsource;
-	iEvent.getByToken(LheToken_, wgtsource);
-	std::cout<<"weight number "<<wgtsource->weights().size()<<std::endl;
-        for ( int i=0; i<1113; ++i) {
-                     pweight[i]= wgtsource->weights()[i].wgt/wgtsource->originalXWGTUP();
-		std::cout<<"weight= "<<pweight[i]<<std::endl;
-                }
-
-
-
         edm::Handle<std::vector<PileupSummaryInfo>>  PupInfo;
         iEvent.getByToken(PUToken_, PupInfo);
         std::vector<PileupSummaryInfo>::const_iterator PVI;
@@ -1097,6 +1056,8 @@ L1prefiringdown =(*theprefweightdown);
 			ijj++;
 		}
 	}
+
+
 
 
    edm::Handle<edm::View<pat::Muon>> loosemus;
@@ -1594,9 +1555,6 @@ void PKUTreeMaker::setDummyValues() {
      pileupWeight   = -1e1;
      lumiWeight     = -1e1;
      theWeight = -99;
-L1prefiring = -99;
-L1prefiringup = -99;
-L1prefiringdown = -99;
      lep            = -1e1;
      nlooseeles=-1e1;
      nloosemus=-1e1;
@@ -1636,17 +1594,12 @@ L1prefiringdown = -99;
      MET_corrPx = -99;
      MET_corrPy = -99;
 
-	for(int j=0; j<1113; j++){
-		pweight[j]=0.0;
-	}
-
 	for(int i=0; i<6;i++){
 		genjet_pt[i]  = -1e1;
 		genjet_eta[i]  = -1e1;
 		genjet_phi[i]  = -1e1;
 		genjet_e[i]  = -1e1;
 	}   
-
 
      for(int i=0; i<6; i++) {
 ak4jet_hf[i]=-1e1;
